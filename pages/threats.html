@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Современные угрозы | CyberSec Hub</title>
+    <meta name="description" content="Актуальные угрозы кибербезопасности: вирусы, трояны, фишинг, DDoS и другие виды кибератак">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0a0a0a',
+                        'cyber-green': '#00ff41',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-red': '#ff0040',
+                        'cyber-gray': '#1a1a1a',
+                        'cyber-light': '#f0f0f0',
+                        'warning-yellow': '#ffa500',
+                        'danger-red': '#dc2626',
+                        'success-green': '#16a34a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        .threat-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(10, 10, 10, 0.95));
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .threat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .threat-card.critical::before {
+            background: linear-gradient(90deg, #ff0040, #ff4444);
+            opacity: 1;
+        }
+        
+        .threat-card.high::before {
+            background: linear-gradient(90deg, #ffa500, #ffcc00);
+            opacity: 1;
+        }
+        
+        .threat-card.medium::before {
+            background: linear-gradient(90deg, #00d4ff, #0099cc);
+            opacity: 1;
+        }
+        
+        .threat-card.low::before {
+            background: linear-gradient(90deg, #00ff41, #00cc33);
+            opacity: 1;
+        }
+        
+        .threat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .threat-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .threat-level.critical {
+            background: rgba(255, 0, 64, 0.2);
+            color: #ff0040;
+            border: 1px solid #ff0040;
+        }
+        
+        .threat-level.high {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+        
+        .threat-level.medium {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+        
+        .threat-level.low {
+            background: rgba(0, 255, 65, 0.2);
+            color: #00ff41;
+            border: 1px solid #00ff41;
+        }
+        
+        .stats-widget {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-widget:hover {
+            border-color: rgba(0, 255, 65, 0.6);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 8px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00ff41, #00d4ff, #8b5cf6);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff41;
+            border: 2px solid #0a0a0a;
+        }
+        
+        .timeline-date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .attack-vector {
+            background: rgba(255, 0, 64, 0.1);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .mitigation {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .cyber-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .cyber-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        
+        .alert-banner {
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .alert-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Scrollbar стили */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 65, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 65, 0.7);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-cyber-light">
+    <!-- Навигация -->
+    <nav class="fixed top-0 w-full bg-cyber-dark/90 backdrop-blur-md border-b border-cyber-green/30 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="../index.html" class="text-2xl font-bold font-mono text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>CyberSec Hub
+                        </a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="../index.html" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Главная</a>
+                            <a href="#current-threats" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Угрозы</a>
+                            <a href="#statistics" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Статистика</a>
+                            <a href="#timeline" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Хронология</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-cyber-green rounded-full pulse"></div>
+                        <span class="text-xs text-cyber-green">Мониторинг активен</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Алерт баннер -->
+    <div class="alert-banner mt-16 mx-4">
+        <div class="max-w-7xl mx-auto flex items-center">
+            <i class="fas fa-exclamation-triangle text-cyber-red mr-3"></i>
+            <div class="flex-1">
+                <strong>Внимание!</strong> Обнаружена новая кампания фишинговых атак, направленная на банковские учреждения.
+            </div>
+            <a href="https://github.com/swelock/cybersec-hub/blob/main/threats/current-campaign.md" target="_blank" class="cyber-btn ml-4 text-xs">
+                Подробнее
+            </a>
+        </div>
+    </div>
+
+    <!-- Главная секция -->
+    <section class="py-20 bg-gradient-to-br from-cyber-dark via-cyber-gray to-cyber-dark cyber-grid">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-red">Современные угрозы</span>
+                    <br>
+                    <span class="text-cyber-green">кибербезопасности</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Актуальная информация о киберугрозах, методах атак и способах защиты 
+                    в постоянно меняющемся ландшафте кибербезопасности
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Статистика -->
+    <section id="statistics" class="py-16 bg-cyber-gray/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green">Статистика</span> киберугроз
+                </h2>
+                <p class="text-xl text-gray-300">
+                    Данные за последние 30 дней
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="stats-widget fade-in">
+                    <div class="stats-number text-cyber-red">2,847</div>
+                    <div class="text-sm text-gray-400">Обнаружено атак</div>
+                </div>
+                
+                <div class="stats-widget fade-in">
+                    <div class="stats-number text-warning-yellow">156</div>
+                    <div class="text-sm text-gray-400">Новых угроз</div>
+                </div>
+                
+                <div class="stats-widget fade-in">
+                    <div class="stats-number text-cyber-blue">94.2%</div>
+                    <div class="text-sm text-gray-400">Заблокировано</div>
+                </div>
+                
+                <div class="stats-widget fade-in">
+                    <div class="stats-number text-cyber-green">1,247</div>
+                    <div class="text-sm text-gray-400">Патчей выпущено</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="threat-card fade-in">
+                    <h3 class="text-xl font-bold mb-4 font-tech">
+                        <i class="fas fa-chart-bar text-cyber-green mr-2"></i>
+                        Типы атак
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="attackTypesChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <h3 class="text-xl font-bold mb-4 font-tech">
+                        <i class="fas fa-chart-line text-cyber-blue mr-2"></i>
+                        Динамика угроз
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="threatTrendsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Текущие угрозы -->
+    <section id="current-threats" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-red">Актуальные</span> угрозы
+                </h2>
+                <p class="text-xl text-gray-300">
+                    Критические и высокоприоритетные угрозы, требующие немедленного внимания
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Угроза 1 -->
+                <div class="threat-card critical slide-in-left">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="threat-level critical">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            Критический
+                        </div>
+                        <div class="text-sm text-gray-400">Обновлено 2 часа назад</div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3 font-tech">
+                        <i class="fas fa-virus text-cyber-red mr-2"></i>
+                        Trojan.Win32.Emotet
+                    </h3>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Новый вариант троянца Emotet с улучшенными возможностями уклонения от антивирусов. 
+                        Распространяется через фишинговые письма с вложениями Office.
+                    </p>
+                    
+                    <div class="attack-vector">
+                        <h4 class="font-bold mb-2 text-cyber-red">
+                            <i class="fas fa-crosshairs mr-2"></i>Вектор атаки
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Фишинговые email с макросами</li>
+                            <li>• Эксплуатация CVE-2022-30190</li>
+                            <li>• Латеральное движение через SMB</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mitigation">
+                        <h4 class="font-bold mb-2 text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>Меры защиты
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Отключить макросы в Office</li>
+                            <li>• Обновить антивирусные базы</li>
+                            <li>• Применить патчи Microsoft</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4">
+                        <div class="flex items-center text-sm text-gray-400">
+                            <i class="fas fa-globe mr-2"></i>
+                            Распространение: Глобальное
+                        </div>
+                        <a href="https://github.com/swelock/cybersec-hub/blob/main/threats/emotet.md" target="_blank" class="cyber-btn">
+                            <i class="fas fa-info-circle mr-2"></i>Подробнее
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Угроза 2 -->
+                <div class="threat-card high slide-in-right">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="threat-level high">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                            Высокий
+                        </div>
+                        <div class="text-sm text-gray-400">Обновлено 4 часа назад</div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3 font-tech">
+                        <i class="fas fa-lock text-warning-yellow mr-2"></i>
+                        LockBit 3.0 Ransomware
+                    </h3>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Новая версия программы-вымогателя LockBit с улучшенным шифрованием 
+                        и методами уклонения от детекции. Нацелена на корпоративные сети.
+                    </p>
+                    
+                    <div class="attack-vector">
+                        <h4 class="font-bold mb-2 text-cyber-red">
+                            <i class="fas fa-crosshairs mr-2"></i>Вектор атаки
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• RDP брутфорс атаки</li>
+                            <li>• Эксплуатация уязвимостей VPN</li>
+                            <li>• Социальная инженерия</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mitigation">
+                        <h4 class="font-bold mb-2 text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>Меры защиты
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Регулярные бэкапы данных</li>
+                            <li>• Двухфакторная аутентификация</li>
+                            <li>• Сегментация сети</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4">
+                        <div class="flex items-center text-sm text-gray-400">
+                            <i class="fas fa-building mr-2"></i>
+                            Цель: Корпоративный сектор
+                        </div>
+                        <a href="https://github.com/swelock/cybersec-hub/blob/main/threats/lockbit.md" target="_blank" class="cyber-btn">
+                            <i class="fas fa-info-circle mr-2"></i>Подробнее
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Угроза 3 -->
+                <div class="threat-card medium slide-in-left">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="threat-level medium">
+                            <i class="fas fa-exclamation mr-1"></i>
+                            Средний
+                        </div>
+                        <div class="text-sm text-gray-400">Обновлено 6 часов назад</div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3 font-tech">
+                        <i class="fas fa-fishing-rod text-cyber-blue mr-2"></i>
+                        Phishing Campaign "BankDrop"
+                    </h3>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Массовая фишинговая кампания, имитирующая уведомления от популярных банков. 
+                        Цель - кража банковских данных и двухфакторных кодов.
+                    </p>
+                    
+                    <div class="attack-vector">
+                        <h4 class="font-bold mb-2 text-cyber-red">
+                            <i class="fas fa-crosshairs mr-2"></i>Вектор атаки
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Поддельные SMS сообщения</li>
+                            <li>• Клонированные банковские сайты</li>
+                            <li>• Перехват SMS кодов</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mitigation">
+                        <h4 class="font-bold mb-2 text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>Меры защиты
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Проверка URL перед вводом данных</li>
+                            <li>• Использование официальных приложений</li>
+                            <li>• Обучение пользователей</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4">
+                        <div class="flex items-center text-sm text-gray-400">
+                            <i class="fas fa-users mr-2"></i>
+                            Цель: Частные лица
+                        </div>
+                        <a href="https://github.com/swelock/cybersec-hub/blob/main/threats/phishing.md" target="_blank" class="cyber-btn">
+                            <i class="fas fa-info-circle mr-2"></i>Подробнее
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Угроза 4 -->
+                <div class="threat-card low slide-in-right">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="threat-level low">
+                            <i class="fas fa-info mr-1"></i>
+                            Низкий
+                        </div>
+                        <div class="text-sm text-gray-400">Обновлено 12 часов назад</div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3 font-tech">
+                        <i class="fas fa-bug text-cyber-green mr-2"></i>
+                        CVE-2024-1234 WordPress Plugin
+                    </h3>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Обнаружена уязвимость в популярном WordPress плагине, позволяющая 
+                        выполнить SQL-инъекцию. Уже выпущен патч.
+                    </p>
+                    
+                    <div class="attack-vector">
+                        <h4 class="font-bold mb-2 text-cyber-red">
+                            <i class="fas fa-crosshairs mr-2"></i>Вектор атаки
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• SQL инъекция через GET параметры</li>
+                            <li>• Извлечение данных из БД</li>
+                            <li>• Возможность RCE</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mitigation">
+                        <h4 class="font-bold mb-2 text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>Меры защиты
+                        </h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Обновить плагин до версии 2.1.3</li>
+                            <li>• Настроить Web Application Firewall</li>
+                            <li>• Ограничить доступ к админке</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4">
+                        <div class="flex items-center text-sm text-gray-400">
+                            <i class="fas fa-wordpress mr-2"></i>
+                            Платформа: WordPress
+                        </div>
+                        <a href="https://github.com/swelock/cybersec-hub/blob/main/threats/wordpress-cve.md" target="_blank" class="cyber-btn">
+                            <i class="fas fa-info-circle mr-2"></i>Подробнее
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Хронология -->
+    <section id="timeline" class="py-16 bg-cyber-gray/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green">Хронология</span> киберинцидентов
+                </h2>
+                <p class="text-xl text-gray-300">
+                    Последние значимые события в сфере кибербезопасности
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="timeline">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">15 октября 2024</div>
+                        <h3 class="font-bold text-lg mb-2">Атака на энергетическую компанию</h3>
+                        <p class="text-gray-300 text-sm">
+                            Группа хакеров APT28 провела целенаправленную атаку на энергетическую 
+                            инфраструктуру, используя зараженные USB-накопители.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">12 октября 2024</div>
+                        <h3 class="font-bold text-lg mb-2">Утечка данных в социальной сети</h3>
+                        <p class="text-gray-300 text-sm">
+                            Обнаружена утечка персональных данных 2.3 млн пользователей из-за 
+                            неправильно настроенной базы данных MongoDB.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">08 октября 2024</div>
+                        <h3 class="font-bold text-lg mb-2">Новый вариант ransomware</h3>
+                        <p class="text-gray-300 text-sm">
+                            Исследователи обнаружили новый вариант программы-вымогателя, 
+                            использующий квантовые алгоритмы для шифрования.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">05 октября 2024</div>
+                        <h3 class="font-bold text-lg mb-2">Фишинговая атака на банки</h3>
+                        <p class="text-gray-300 text-sm">
+                            Зафиксирована масштабная фишинговая кампания, нацеленная на клиентов 
+                            крупнейших банков. Ущерб оценивается в $50 млн.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">01 октября 2024</div>
+                        <h3 class="font-bold text-lg mb-2">Критическая уязвимость в Linux</h3>
+                        <p class="text-gray-300 text-sm">
+                            Обнаружена критическая уязвимость в ядре Linux, позволяющая 
+                            злоумышленникам получить root права. Выпущен экстренный патч.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Рекомендации -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green">Рекомендации</span> по защите
+                </h2>
+                <p class="text-xl text-gray-300">
+                    Основные меры для защиты от современных киберугроз
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-shield-virus text-4xl text-cyber-green mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Антивирусная защита</h3>
+                        <p class="text-gray-300 text-sm">
+                            Установите и регулярно обновляйте антивирусное ПО. 
+                            Используйте решения с поведенческим анализом.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-key text-4xl text-cyber-blue mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Сильные пароли</h3>
+                        <p class="text-gray-300 text-sm">
+                            Используйте уникальные сложные пароли для всех аккаунтов. 
+                            Включите двухфакторную аутентификацию.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-download text-4xl text-cyber-purple mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Обновления</h3>
+                        <p class="text-gray-300 text-sm">
+                            Регулярно обновляйте операционную систему и все программы. 
+                            Включите автоматические обновления.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-database text-4xl text-cyber-red mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Резервное копирование</h3>
+                        <p class="text-gray-300 text-sm">
+                            Создавайте регулярные бэкапы важных данных. 
+                            Храните копии в отдельном, недоступном для сети месте.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-graduation-cap text-4xl text-warning-yellow mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Обучение</h3>
+                        <p class="text-gray-300 text-sm">
+                            Изучайте современные угрозы и методы защиты. 
+                            Обучайте сотрудников основам кибербезопасности.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="threat-card fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-network-wired text-4xl text-cyber-green mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Сетевая безопасность</h3>
+                        <p class="text-gray-300 text-sm">
+                            Используйте фаерволы и VPN. Сегментируйте сеть 
+                            и ограничивайте доступ к критическим ресурсам.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-cyber-dark border-t border-cyber-green/30 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-tech">
+                        <i class="fas fa-shield-alt mr-2 text-cyber-green"></i>CyberSec Hub
+                    </h4>
+                    <p class="text-gray-400 text-sm">
+                        Мониторинг и анализ современных киберугроз
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Мониторинг</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Текущие угрозы</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Статистика</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Аналитика</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Ресурсы</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Базы данных CVE</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Индикаторы компрометации</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Правила YARA</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Уведомления</h5>
+                    <div class="flex">
+                        <input type="email" placeholder="Email" class="flex-1 px-3 py-2 bg-cyber-gray border border-cyber-green/30 rounded-l-md text-sm">
+                        <a href="https://github.com/swelock/cybersec-hub/issues/new?template=subscribe-alerts.md" target="_blank" class="cyber-btn rounded-l-none">
+                            <i class="fas fa-bell"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-cyber-green/30 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 CyberSec Hub. Все права защищены. Данные обновляются в реальном времени.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Инициализация графиков
+        document.addEventListener('DOMContentLoaded', function() {
+            // График типов атак
+            const attackTypesCtx = document.getElementById('attackTypesChart').getContext('2d');
+            new Chart(attackTypesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Malware', 'Phishing', 'DDoS', 'Ransomware', 'Social Engineering'],
+                    datasets: [{
+                        data: [35, 28, 15, 12, 10],
+                        backgroundColor: [
+                            '#ff0040',
+                            '#ffa500',
+                            '#00d4ff',
+                            '#8b5cf6',
+                            '#00ff41'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#0a0a0a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f0f0f0',
+                                font: {
+                                    family: 'Rajdhani'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // График динамики угроз
+            const threatTrendsCtx = document.getElementById('threatTrendsChart').getContext('2d');
+            new Chart(threatTrendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт'],
+                    datasets: [{
+                        label: 'Количество угроз',
+                        data: [120, 190, 300, 250, 420, 380, 480, 350, 520, 610],
+                        borderColor: '#00ff41',
+                        backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#f0f0f0',
+                                font: {
+                                    family: 'Rajdhani'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Анимация появления элементов
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) translateX(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Настройка анимаций
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            if (element.classList.contains('slide-in-left')) {
+                element.style.transform = 'translateX(-50px)';
+            } else if (element.classList.contains('slide-in-right')) {
+                element.style.transform = 'translateX(50px)';
+            } else {
+                element.style.transform = 'translateY(20px)';
+            }
+            
+            observer.observe(element);
+        });
+
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

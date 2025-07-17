@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статьи и обучение | CyberSec Hub</title>
+    <meta name="description" content="Образовательные статьи по информационной безопасности, пентестингу и этичному хакингу">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0a0a0a',
+                        'cyber-green': '#00ff41',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-red': '#ff0040',
+                        'cyber-gray': '#1a1a1a',
+                        'cyber-light': '#f0f0f0',
+                        'habr-orange': '#ff6600',
+                        'habr-dark': '#1e1e1e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+        }
+        
+        .article-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(10, 10, 10, 0.95));
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .article-card:hover {
+            border-color: rgba(0, 255, 65, 0.5);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff41, #00d4ff, #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .article-card:hover::before {
+            opacity: 1;
+        }
+        
+        .cyber-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .cyber-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .difficulty-easy {
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+        }
+        
+        .difficulty-medium {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+        }
+        
+        .difficulty-hard {
+            background: rgba(255, 0, 64, 0.1);
+            color: #ff0040;
+        }
+        
+        .code-block {
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            color: #00ff41;
+        }
+        
+        .syntax-highlight .keyword {
+            color: #ff0040;
+        }
+        
+        .syntax-highlight .string {
+            color: #00d4ff;
+        }
+        
+        .syntax-highlight .comment {
+            color: #666;
+        }
+        
+        .reading-time {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ff41, #00d4ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #0a0a0a;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(45deg, #ff6600, #ff0040);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .search-bar {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #f0f0f0;
+            width: 100%;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+        
+        .filter-btn {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #f0f0f0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(0, 255, 65, 0.1);
+            border-color: #00ff41;
+            color: #00ff41;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 32px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 4px;
+            color: #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover,
+        .pagination button.active {
+            background: rgba(0, 255, 65, 0.1);
+            border-color: #00ff41;
+            color: #00ff41;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Scrollbar стили */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 65, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 65, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-cyber-light">
+    <!-- Навигация -->
+    <nav class="fixed top-0 w-full bg-cyber-dark/90 backdrop-blur-md border-b border-cyber-green/30 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="../index.html" class="text-2xl font-bold font-mono text-cyber-green">
+                            <i class="fas fa-shield-alt mr-2"></i>CyberSec Hub
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://github.com/swelock/cybersec-hub/issues/new?template=article.md" target="_blank" class="cyber-btn text-xs">
+                        <i class="fas fa-plus mr-2"></i>Добавить статью
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главная секция -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-cyber-dark via-cyber-gray to-cyber-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green">Образовательные</span> статьи
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Подборка качественных материалов по информационной безопасности, 
+                    пентестингу и этичному хакингу от экспертов индустрии
+                </p>
+            </div>
+
+            <!-- Поиск и фильтры -->
+            <div class="mb-12">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                placeholder="Поиск статей..." 
+                                class="search-bar pr-12"
+                                id="searchInput"
+                            >
+                            <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-cyber-green"></i>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="filter-btn active" data-filter="all">Все</button>
+                        <button class="filter-btn" data-filter="beginner">Начальный</button>
+                        <button class="filter-btn" data-filter="intermediate">Средний</button>
+                        <button class="filter-btn" data-filter="advanced">Продвинутый</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Статьи -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8" id="articlesContainer">
+                
+                <!-- Статья 1 -->
+                <article class="article-card fade-in" data-difficulty="beginner">
+                    <div class="featured-badge">
+                        <i class="fas fa-star mr-1"></i>Рекомендуем
+                    </div>
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Пентестинг</span>
+                            <span class="tag">Nmap</span>
+                            <span class="tag difficulty-easy">Начальный</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            Основы сканирования портов с помощью Nmap
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Подробное руководство по использованию Nmap для обнаружения открытых портов 
+                            и служб в сети. Рассмотрим основные типы сканирования и их применение.
+                        </p>
+                        
+                        <div class="code-block">
+                            <pre class="syntax-highlight">
+<span class="comment"># Базовое сканирование портов</span>
+<span class="keyword">nmap</span> <span class="string">192.168.1.1</span>
+
+<span class="comment"># Сканирование с определением версий</span>
+<span class="keyword">nmap</span> <span class="string">-sV</span> <span class="string">192.168.1.1</span>
+
+<span class="comment"># Скрытное сканирование</span>
+<span class="keyword">nmap</span> <span class="string">-sS</span> <span class="string">192.168.1.1</span>
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">АК</div>
+                        <div>
+                            <div class="font-semibold">Алексей Козлов</div>
+                            <div class="text-xs text-gray-400">Специалист по ИБ</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>8 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>156</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>2.3k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">15 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/564620/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Статья 2 -->
+                <article class="article-card fade-in" data-difficulty="intermediate">
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Web Security</span>
+                            <span class="tag">OWASP</span>
+                            <span class="tag difficulty-medium">Средний</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            SQL-инъекции: от теории к практике
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Детальный разбор SQL-инъекций: типы, методы обнаружения и эксплуатации. 
+                            Практические примеры и способы защиты от данного типа атак.
+                        </p>
+                        
+                        <div class="code-block">
+                            <pre class="syntax-highlight">
+<span class="comment">-- Пример уязвимого запроса</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users 
+<span class="keyword">WHERE</span> username = <span class="string">'$username'</span> 
+<span class="keyword">AND</span> password = <span class="string">'$password'</span>;
+
+<span class="comment">-- Эксплуатация</span>
+<span class="string">' OR '1'='1' --</span>
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">МП</div>
+                        <div>
+                            <div class="font-semibold">Мария Петрова</div>
+                            <div class="text-xs text-gray-400">Пентестер</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>12 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>89</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>1.8k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">12 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/501700/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Статья 3 -->
+                <article class="article-card fade-in" data-difficulty="advanced">
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Криптография</span>
+                            <span class="tag">RSA</span>
+                            <span class="tag difficulty-hard">Продвинутый</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            Атаки на криптографические алгоритмы
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Глубокий анализ методов атак на популярные криптографические алгоритмы. 
+                            Timing attacks, side-channel атаки и методы их предотвращения.
+                        </p>
+                        
+                        <div class="code-block">
+                            <pre class="syntax-highlight">
+<span class="comment"># Пример timing attack</span>
+<span class="keyword">import</span> time
+<span class="keyword">def</span> <span class="string">vulnerable_compare</span>(a, b):
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(a)):
+        <span class="keyword">if</span> a[i] != b[i]:
+            <span class="keyword">return</span> False
+        time.sleep(0.01)  <span class="comment"># Уязвимость</span>
+    <span class="keyword">return</span> True
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">ИС</div>
+                        <div>
+                            <div class="font-semibold">Иван Смирнов</div>
+                            <div class="text-xs text-gray-400">Криптоаналитик</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>25 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>67</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>945</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">10 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/462699/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Статья 4 -->
+                <article class="article-card fade-in" data-difficulty="beginner">
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Социальная инженерия</span>
+                            <span class="tag">Phishing</span>
+                            <span class="tag difficulty-easy">Начальный</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            Защита от социальной инженерии
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Основные методы социальной инженерии и способы защиты от них. 
+                            Обучение сотрудников распознаванию фишинговых атак.
+                        </p>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">ЕВ</div>
+                        <div>
+                            <div class="font-semibold">Елена Волкова</div>
+                            <div class="text-xs text-gray-400">Тренер по ИБ</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>6 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>203</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>3.1k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">8 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/589823/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Статья 5 -->
+                <article class="article-card fade-in" data-difficulty="intermediate">
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Malware</span>
+                            <span class="tag">Analysis</span>
+                            <span class="tag difficulty-medium">Средний</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            Анализ вредоносного ПО: статический и динамический подходы
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Методы анализа вредоносного ПО: использование песочниц, дизассемблеров 
+                            и других инструментов для исследования malware.
+                        </p>
+                        
+                        <div class="code-block">
+                            <pre class="syntax-highlight">
+<span class="comment"># Анализ PE файла</span>
+<span class="keyword">import</span> pefile
+
+pe = pefile.PE(<span class="string">'malware.exe'</span>)
+<span class="keyword">print</span>(pe.dump_info())
+
+<span class="comment"># Проверка импортов</span>
+<span class="keyword">for</span> entry <span class="keyword">in</span> pe.DIRECTORY_ENTRY_IMPORT:
+    <span class="keyword">print</span>(entry.dll)
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">ДК</div>
+                        <div>
+                            <div class="font-semibold">Дмитрий Кузнецов</div>
+                            <div class="text-xs text-gray-400">Malware Analyst</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>18 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>124</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>2.7k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">5 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/517266/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Статья 6 -->
+                <article class="article-card fade-in" data-difficulty="advanced">
+                    <div class="mb-4">
+                        <div class="mb-2">
+                            <span class="tag">Red Team</span>
+                            <span class="tag">C2</span>
+                            <span class="tag difficulty-hard">Продвинутый</span>
+                        </div>
+                        <h2 class="text-xl font-bold mb-3 font-tech">
+                            Создание Command & Control сервера
+                        </h2>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Разработка собственного C2 сервера для Red Team операций. 
+                            Архитектура, протоколы связи и методы маскировки трафика.
+                        </p>
+                        
+                        <div class="code-block">
+                            <pre class="syntax-highlight">
+<span class="comment"># Простой HTTP C2 сервер</span>
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request
+app = Flask(__name__)
+
+<span class="keyword">@app.route</span>(<span class="string">'/beacon'</span>, methods=[<span class="string">'POST'</span>])
+<span class="keyword">def</span> beacon():
+    data = request.json
+    <span class="comment"># Обработка данных от агента</span>
+    <span class="keyword">return</span> {<span class="string">'command'</span>: <span class="string">'whoami'</span>}
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="author-info">
+                        <div class="author-avatar">АР</div>
+                        <div>
+                            <div class="font-semibold">Антон Романов</div>
+                            <div class="text-xs text-gray-400">Red Team Lead</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>35 мин</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span>45</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>1.2k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">3 октября 2024</span>
+                        <a href="https://habr.com/ru/articles/553506/" target="_blank" class="cyber-btn">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Пагинация -->
+            <div class="pagination">
+                <button><i class="fas fa-chevron-left"></i></button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>5</button>
+                <button><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-cyber-dark border-t border-cyber-green/30 py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-tech">
+                        <i class="fas fa-shield-alt mr-2 text-cyber-green"></i>CyberSec Hub
+                    </h4>
+                    <p class="text-gray-400 text-sm">
+                        Образовательная платформа для изучения информационной безопасности
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Категории</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Пентестинг</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Веб-безопасность</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Криптография</a></li>
+                        <li><a href="#" class="hover:text-cyber-green transition-colors">Malware</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Подписаться</h5>
+                    <div class="flex">
+                        <input type="email" placeholder="Email" class="flex-1 px-3 py-2 bg-cyber-gray border border-cyber-green/30 rounded-l-md text-sm">
+                        <a href="https://github.com/swelock/cybersec-hub/issues/new?template=subscribe.md" target="_blank" class="cyber-btn rounded-l-none">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-cyber-green/30 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 CyberSec Hub. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Фильтрация статей
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const articles = document.querySelectorAll('.article-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Удаляем активный класс у всех кнопок
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Добавляем активный класс к нажатой кнопке
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                articles.forEach(article => {
+                    if (filter === 'all' || article.dataset.difficulty === filter) {
+                        article.style.display = 'block';
+                    } else {
+                        article.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Поиск статей
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            articles.forEach(article => {
+                const title = article.querySelector('h2').textContent.toLowerCase();
+                const content = article.querySelector('p').textContent.toLowerCase();
+                const tags = Array.from(article.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase()).join(' ');
+                
+                if (title.includes(searchTerm) || content.includes(searchTerm) || tags.includes(searchTerm)) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        });
+
+        // Анимация появления статей
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Настройка начальных стилей и наблюдения
+        articles.forEach(article => {
+            article.style.opacity = '0';
+            article.style.transform = 'translateY(20px)';
+            article.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(article);
+        });
+    </script>
+</body>
+</html> 

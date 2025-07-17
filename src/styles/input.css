@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+  
+  body {
+    @apply bg-cyber-dark text-cyber-light overflow-x-hidden;
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.6;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .cyber-btn {
+    @apply relative inline-flex items-center justify-center px-6 py-3 font-mono font-bold text-sm uppercase tracking-widest border-2 border-cyber-green bg-transparent text-cyber-green transition-all duration-300 hover:bg-cyber-green hover:text-cyber-dark hover:shadow-cyber;
+  }
+  
+  .cyber-btn::before {
+    content: '';
+    @apply absolute inset-0 bg-cyber-green opacity-0 transition-opacity duration-300;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  }
+  
+  .cyber-btn:hover::before {
+    @apply opacity-10;
+  }
+  
+  .terminal-window {
+    @apply bg-terminal-bg border border-gray-600 rounded-lg shadow-terminal;
+  }
+  
+  .terminal-header {
+    @apply bg-gray-800 px-4 py-2 flex items-center space-x-2 rounded-t-lg;
+  }
+  
+  .terminal-button {
+    @apply w-3 h-3 rounded-full;
+  }
+  
+  .terminal-content {
+    @apply p-4 font-mono text-sm text-terminal-green;
+  }
+  
+  .glitch-text {
+    @apply relative inline-block;
+    animation: glitch 2s infinite;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    @apply absolute top-0 left-0 w-full h-full;
+  }
+  
+  .glitch-text::before {
+    animation: glitch-1 2s infinite;
+    color: #ff00ff;
+    z-index: -1;
+  }
+  
+  .glitch-text::after {
+    animation: glitch-2 2s infinite;
+    color: #00ffff;
+    z-index: -2;
+  }
+  
+  .neon-border {
+    @apply border-2 border-neon-blue shadow-neon;
+  }
+  
+  .matrix-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .matrix-bg::before {
+    content: '';
+    @apply absolute inset-0 opacity-10;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+    animation: matrix-scan 3s linear infinite;
+  }
+  
+  .card-cyber {
+    @apply bg-cyber-gray border border-cyber-green/30 rounded-lg p-6 backdrop-blur-sm;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+    transition: all 0.3s ease;
+  }
+  
+  .card-cyber:hover {
+    @apply border-cyber-green/60 shadow-cyber;
+    transform: translateY(-2px);
+  }
+  
+  .typing-effect {
+    @apply inline-block;
+    overflow: hidden;
+    border-right: 3px solid #00ff41;
+    animation: typing 3.5s steps(30, end), blink-caret 0.5s step-end infinite;
+  }
+  
+  .scan-line {
+    @apply absolute top-0 left-0 w-full h-px bg-cyber-green;
+    animation: scan 2s linear infinite;
+  }
+  
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-1 {
+  0% { clip-path: inset(40% 0 61% 0); }
+  20% { clip-path: inset(92% 0 1% 0); }
+  40% { clip-path: inset(43% 0 1% 0); }
+  60% { clip-path: inset(25% 0 58% 0); }
+  80% { clip-path: inset(54% 0 7% 0); }
+  100% { clip-path: inset(58% 0 43% 0); }
+}
+
+@keyframes glitch-2 {
+  0% { clip-path: inset(25% 0 58% 0); }
+  20% { clip-path: inset(54% 0 7% 0); }
+  40% { clip-path: inset(58% 0 43% 0); }
+  60% { clip-path: inset(40% 0 61% 0); }
+  80% { clip-path: inset(92% 0 1% 0); }
+  100% { clip-path: inset(43% 0 1% 0); }
+}
+
+@keyframes matrix-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #00ff41; }
+}
+
+/* Scrollbar стили */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cyber-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cyber-green/50 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-cyber-green/70;
+}
+
+/* Анимации появления */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+} 

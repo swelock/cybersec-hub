@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Hub | Информационная безопасность</title>
+    <meta name="description" content="Современный сайт об информационной безопасности, пентестинге и кибербезопасности">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0a0a0a',
+                        'cyber-green': '#00ff41',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-red': '#ff0040',
+                        'cyber-gray': '#1a1a1a',
+                        'cyber-light': '#f0f0f0',
+                        'matrix-green': '#00ff41',
+                        'terminal-bg': '#0c0c0c',
+                        'terminal-green': '#00ff00',
+                        'neon-blue': '#00ffff',
+                        'neon-pink': '#ff00ff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        .cyber-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+        
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            animation: glitch 2s infinite;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch-1 2s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch-2 2s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        .terminal-window {
+            background: #0c0c0c;
+            border: 1px solid #666;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .terminal-header {
+            background: #333;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-content {
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #00ff00;
+        }
+        
+        .typing-effect {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid #00ff41;
+            animation: typing 3.5s steps(30, end), blink-caret 0.5s step-end infinite;
+        }
+        
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .card-cyber {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .card-cyber:hover {
+            border-color: rgba(0, 255, 65, 0.6);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .matrix-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .matrix-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            animation: matrix-scan 3s linear infinite;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        @keyframes glitch-1 {
+            0% { clip-path: inset(40% 0 61% 0); }
+            20% { clip-path: inset(92% 0 1% 0); }
+            40% { clip-path: inset(43% 0 1% 0); }
+            60% { clip-path: inset(25% 0 58% 0); }
+            80% { clip-path: inset(54% 0 7% 0); }
+            100% { clip-path: inset(58% 0 43% 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0% { clip-path: inset(25% 0 58% 0); }
+            20% { clip-path: inset(54% 0 7% 0); }
+            40% { clip-path: inset(58% 0 43% 0); }
+            60% { clip-path: inset(40% 0 61% 0); }
+            80% { clip-path: inset(92% 0 1% 0); }
+            100% { clip-path: inset(43% 0 1% 0); }
+        }
+        
+        @keyframes matrix-scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ff41; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* Scrollbar стили */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 65, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 65, 0.7);
+        }
+
+        /* Стили для анимаций заднего плана */
+        #matrix-rain {
+            mix-blend-mode: screen;
+        }
+
+        #floating-code {
+            filter: blur(0.5px);
+        }
+
+        #network-packets {
+            filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
+        }
+
+        #system-logs {
+            backdrop-filter: blur(5px);
+            border-left: 3px solid #ff0040;
+        }
+
+        #brute-force {
+            backdrop-filter: blur(5px);
+            border-left: 3px solid #ffa500;
+        }
+
+        #sql-injection {
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+        }
+
+        #ddos-visualization {
+            filter: blur(0.5px);
+        }
+
+        #hash-flow {
+            filter: blur(1px);
+        }
+
+        /* Дополнительные эффекты */
+        @keyframes glitch-bg {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .glitch-background {
+            animation: glitch-bg 0.3s ease-in-out infinite;
+        }
+
+        /* Пульсирующие эффекты */
+        @keyframes security-pulse {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 64, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(255, 0, 64, 0.3); }
+        }
+
+        .security-alert {
+            animation: security-pulse 2s ease-in-out infinite;
+        }
+
+        /* Кодовые блоки с эффектами */
+        .code-rain {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-rain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            animation: code-scan 3s linear infinite;
+        }
+
+        @keyframes code-scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Эффекты для терминала */
+        .terminal-window {
+            position: relative;
+        }
+
+        .terminal-window::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(0, 255, 65, 0.03) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+            animation: terminal-scanline 2s linear infinite;
+        }
+
+        @keyframes terminal-scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Мерцающие элементы */
+        .flicker {
+            animation: flicker 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Эффект сбоя */
+        .digital-glitch {
+            position: relative;
+        }
+
+        .digital-glitch::before,
+        .digital-glitch::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            mix-blend-mode: screen;
+        }
+
+        .digital-glitch::before {
+            animation: digital-glitch-1 2s infinite;
+        }
+
+        .digital-glitch::after {
+            animation: digital-glitch-2 2s infinite;
+        }
+
+        @keyframes digital-glitch-1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes digital-glitch-2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Эффекты нагрузки на систему */
+        .system-load {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .system-load::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0040, transparent);
+            animation: system-load-bar 3s ease-in-out infinite;
+        }
+
+        @keyframes system-load-bar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Анимация для статистики */
+        .stats-number {
+            position: relative;
+        }
+
+        .stats-number::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            animation: stats-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes stats-shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-cyber-light">
+    <!-- Навигация -->
+    <nav class="fixed top-0 w-full bg-cyber-dark/90 backdrop-blur-md border-b border-cyber-green/30 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-2xl font-bold font-mono text-cyber-green flicker">
+                            <i class="fas fa-shield-alt mr-2"></i>CyberSec Hub
+                        </span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#home" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Главная</a>
+                            <a href="#about" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">О кибербезопасности</a>
+                            <a href="#pentesting" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Пентест</a>
+                            <a href="#tools" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Инструменты</a>
+                            <a href="#articles" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Статьи</a>
+                            <a href="#contact" class="text-cyber-light hover:text-cyber-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Контакты</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-cyber-light hover:text-cyber-green">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Мобильное меню -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">Главная</a>
+                <a href="#about" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">О кибербезопасности</a>
+                <a href="#pentesting" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">Пентест</a>
+                <a href="#tools" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">Инструменты</a>
+                <a href="#articles" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">Статьи</a>
+                <a href="#contact" class="text-cyber-light hover:text-cyber-green block px-3 py-2 rounded-md text-base font-medium">Контакты</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главная секция -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center cyber-grid glitch-background">
+        <div class="matrix-bg absolute inset-0"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 font-tech">
+                    <span class="glitch-text text-cyber-green digital-glitch" data-text="ИНФОРМАЦИОННАЯ">ИНФОРМАЦИОННАЯ</span>
+                    <br>
+                    <span class="text-cyber-blue flicker">БЕЗОПАСНОСТЬ</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                    Добро пожаловать в мир кибербезопасности. Изучайте современные методы защиты, 
+                    <span class="text-cyber-green">пентестинг</span> и актуальные угрозы в цифровой среде.
+                </p>
+                                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#about" class="cyber-btn">
+                            <i class="fas fa-play mr-2"></i>Начать изучение
+                        </a>
+                        <a href="#terminal" class="cyber-btn">
+                            <i class="fas fa-terminal mr-2"></i>Открыть терминал
+                        </a>
+                    </div>
+            </div>
+        </div>
+        
+        <!-- Анимированный фон -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-cyber-green/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute top-3/4 right-1/4 w-96 h-96 bg-cyber-blue/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+    </section>
+
+    <!-- О кибербезопасности -->
+    <section id="about" class="py-20 bg-cyber-gray/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green digital-glitch">Информационная безопасность</span>
+                    <br>в современном мире
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Изучите ключевые аспекты кибербезопасности и её роль в защите цифровых активов
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-cyber slide-in-left">
+                    <div class="text-center">
+                        <i class="fas fa-shield-alt text-4xl text-cyber-green mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Защита данных</h3>
+                        <p class="text-gray-300">
+                            Современные методы защиты персональных данных и корпоративной информации 
+                            от кибератак и несанкционированного доступа.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <i class="fas fa-bug text-4xl text-cyber-red mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Анализ угроз</h3>
+                        <p class="text-gray-300">
+                            Выявление и анализ потенциальных угроз, уязвимостей в системах 
+                            и разработка стратегий их устранения.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card-cyber slide-in-right">
+                    <div class="text-center">
+                        <i class="fas fa-network-wired text-4xl text-cyber-blue mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4 font-tech">Сетевая безопасность</h3>
+                        <p class="text-gray-300">
+                            Защита сетевой инфраструктуры от атак, мониторинг трафика 
+                            и обеспечение безопасности соединений.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Пентестинг -->
+    <section id="pentesting" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="slide-in-left">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 font-tech">
+                        <span class="text-cyber-green digital-glitch">Пентестинг</span>
+                        <br>и этичный хакинг
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-6">
+                        Пентестинг (penetration testing) - это процесс симуляции кибератак 
+                        на компьютерные системы для обнаружения уязвимостей.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-cyber-green mr-3"></i>
+                            <span>Тестирование веб-приложений</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-cyber-green mr-3"></i>
+                            <span>Анализ сетевой безопасности</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-cyber-green mr-3"></i>
+                            <span>Социальная инженерия</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-cyber-green mr-3"></i>
+                            <span>Мобильные приложения</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right">
+                    <div class="terminal-window code-rain">
+                        <div class="terminal-header">
+                            <div class="terminal-button bg-red-500"></div>
+                            <div class="terminal-button bg-yellow-500"></div>
+                            <div class="terminal-button bg-green-500"></div>
+                            <span class="text-gray-300 text-sm ml-2 flicker">Kali Linux - Terminal</span>
+                        </div>
+                        <div class="terminal-content">
+                            <div id="terminal-output">
+                                <div class="mb-2">
+                                    <span class="text-cyber-green">root@kali:</span><span class="text-cyber-blue">~#</span> 
+                                    <span class="typing-effect">nmap -sV -sC target.com</span>
+                                </div>
+                                <div class="text-gray-400 text-sm">
+                                    Starting Nmap 7.93 ( https://nmap.org )<br>
+                                    Nmap scan report for target.com (192.168.1.100)<br>
+                                    Host is up (0.00050s latency).<br>
+                                    <br>
+                                    PORT     STATE SERVICE VERSION<br>
+                                    22/tcp   open  ssh     OpenSSH 8.9p1<br>
+                                    80/tcp   open  http    Apache httpd 2.4.41<br>
+                                    443/tcp  open  https   Apache httpd 2.4.41<br>
+                                    <br>
+                                    <span class="text-cyber-green flicker">Scan completed successfully!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Инструменты -->
+    <section id="tools" class="py-20 bg-cyber-gray/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green digital-glitch">Инструменты</span> кибербезопасности
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Популярные утилиты и фреймворки для тестирования безопасности
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-cyber fade-in security-alert">
+                    <div class="text-center">
+                        <img src="https://nmap.org/images/nmap-logo-256x256.png" alt="Nmap" class="w-16 h-16 mx-auto mb-4">
+                        <h3 class="text-xl font-bold mb-2 font-tech flicker">Nmap</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Сканер сети для обнаружения хостов и служб
+                        </p>
+                        <a href="https://nmap.org/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-cyber-red rounded-lg flex items-center justify-center">
+                            <i class="fas fa-spider text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 font-tech">Burp Suite</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Платформа для тестирования веб-приложений
+                        </p>
+                        <a href="https://portswigger.net/burp" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-cyber-blue rounded-lg flex items-center justify-center">
+                            <i class="fas fa-terminal text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 font-tech">Metasploit</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Фреймворк для разработки и выполнения эксплойтов
+                        </p>
+                        <a href="https://www.metasploit.com/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-cyber-purple rounded-lg flex items-center justify-center">
+                            <i class="fas fa-wifi text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 font-tech">Wireshark</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Анализатор сетевых пакетов
+                        </p>
+                        <a href="https://www.wireshark.org/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-cyber-green rounded-lg flex items-center justify-center">
+                            <i class="fas fa-lock text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 font-tech">Hashcat</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Инструмент для восстановления паролей
+                        </p>
+                        <a href="https://hashcat.net/hashcat/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-orange-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 font-tech">OWASP ZAP</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Сканер уязвимостей веб-приложений
+                        </p>
+                        <a href="https://www.zaproxy.org/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-external-link-alt mr-2"></i>Узнать больше
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Статьи -->
+    <section id="articles" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green digital-glitch">Актуальные</span> статьи
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Подборка интересных материалов о кибербезопасности с Habr и других источников
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-cyber fade-in">
+                    <div class="mb-4">
+                        <span class="text-xs text-cyber-green font-mono">HABR.COM</span>
+                        <h3 class="text-lg font-bold mb-2 font-tech">
+                            Современные методы защиты от DDoS-атак
+                        </h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Обзор актуальных техник и инструментов для защиты от распределенных атак...
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500">15 минут чтения</span>
+                        <a href="https://habr.com/ru/articles/564620/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="mb-4">
+                        <span class="text-xs text-cyber-green font-mono">HABR.COM</span>
+                        <h3 class="text-lg font-bold mb-2 font-tech">
+                            Безопасность в DevOps: лучшие практики
+                        </h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Как интегрировать безопасность в процессы непрерывной интеграции...
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500">12 минут чтения</span>
+                        <a href="https://habr.com/ru/articles/501700/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-cyber fade-in">
+                    <div class="mb-4">
+                        <span class="text-xs text-cyber-green font-mono">HABR.COM</span>
+                        <h3 class="text-lg font-bold mb-2 font-tech">
+                            Тестирование на проникновение: с чего начать
+                        </h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Руководство для начинающих пентестеров: инструменты, методики...
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500">20 минут чтения</span>
+                        <a href="https://habr.com/ru/articles/462699/" target="_blank" class="cyber-btn text-xs">
+                            <i class="fas fa-arrow-right mr-2"></i>Читать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Интерактивный терминал -->
+    <section id="terminal" class="py-20 bg-cyber-gray/50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green digital-glitch">Интерактивный</span> терминал
+                </h2>
+                <p class="text-xl text-gray-300">
+                    Попробуйте базовые команды Linux и инструменты кибербезопасности
+                </p>
+            </div>
+            
+            <div class="terminal-window system-load">
+                <div class="terminal-header">
+                    <div class="terminal-button bg-red-500"></div>
+                    <div class="terminal-button bg-yellow-500"></div>
+                    <div class="terminal-button bg-green-500"></div>
+                    <span class="text-gray-300 text-sm ml-2 digital-glitch">Interactive Terminal</span>
+                </div>
+                <div class="terminal-content">
+                    <div id="terminal-history" class="mb-4">
+                        <div class="mb-2">
+                            <span class="text-cyber-green">user@cybersec:</span><span class="text-cyber-blue">~$</span> 
+                            <span class="text-white">whoami</span>
+                        </div>
+                        <div class="text-gray-400 mb-2">cybersec-user</div>
+                        <div class="mb-2">
+                            <span class="text-cyber-green">user@cybersec:</span><span class="text-cyber-blue">~$</span> 
+                            <span class="text-white">ls -la</span>
+                        </div>
+                        <div class="text-gray-400 mb-4">
+                            drwxr-xr-x 2 user user 4096 Oct 15 10:30 .<br>
+                            drwxr-xr-x 3 user user 4096 Oct 15 10:30 ..<br>
+                            -rw-r--r-- 1 user user   42 Oct 15 10:30 flag.txt<br>
+                            -rwxr-xr-x 1 user user 8192 Oct 15 10:30 scan.sh
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-cyber-green flicker">user@cybersec:</span><span class="text-cyber-blue">~$</span> 
+                        <input type="text" id="terminal-input" class="bg-transparent outline-none text-white ml-2 flex-1 font-mono" placeholder="Введите команду..." autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400">
+                    Доступные команды: <span class="text-cyber-green">help</span>, 
+                    <span class="text-cyber-green">whoami</span>, 
+                    <span class="text-cyber-green">ls</span>, 
+                    <span class="text-cyber-green">cat</span>, 
+                    <span class="text-cyber-green">nmap</span>, 
+                    <span class="text-cyber-green">clear</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tech">
+                    <span class="text-cyber-green digital-glitch">Свяжитесь</span> с нами
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Есть вопросы о кибербезопасности? Хотите изучить пентестинг? Мы поможем!
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="slide-in-left">
+                    <div class="card-cyber system-load">
+                        <h3 class="text-xl font-bold mb-6 font-tech flicker">Отправить сообщение</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Имя</label>
+                                <input type="text" class="w-full px-3 py-2 bg-cyber-dark border border-cyber-green/30 rounded-md focus:outline-none focus:border-cyber-green">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Email</label>
+                                <input type="email" class="w-full px-3 py-2 bg-cyber-dark border border-cyber-green/30 rounded-md focus:outline-none focus:border-cyber-green">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Сообщение</label>
+                                <textarea rows="4" class="w-full px-3 py-2 bg-cyber-dark border border-cyber-green/30 rounded-md focus:outline-none focus:border-cyber-green resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="cyber-btn w-full">
+                                <i class="fas fa-paper-plane mr-2"></i>Отправить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right">
+                    <div class="space-y-8">
+                        <div class="card-cyber security-alert">
+                            <a href="mailto:info@cybersec-hub.ru" class="flex items-center">
+                                <i class="fas fa-envelope text-cyber-green text-2xl mr-4 flicker"></i>
+                                <div>
+                                    <h4 class="font-bold font-tech">Email</h4>
+                                    <p class="text-gray-300">info@cybersec-hub.ru</p>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="card-cyber security-alert">
+                            <a href="https://t.me/cybersec_hub" target="_blank" class="flex items-center">
+                                <i class="fab fa-telegram text-cyber-blue text-2xl mr-4 flicker"></i>
+                                <div>
+                                    <h4 class="font-bold font-tech">Telegram</h4>
+                                    <p class="text-gray-300">@cybersec_hub</p>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="card-cyber security-alert">
+                            <a href="https://github.com/swelock/cybersec-hub" target="_blank" class="flex items-center">
+                                <i class="fab fa-github text-cyber-purple text-2xl mr-4 flicker"></i>
+                                <div>
+                                    <h4 class="font-bold font-tech">GitHub</h4>
+                                    <p class="text-gray-300">github.com/swelock/cybersec-hub</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-cyber-dark border-t border-cyber-green/30 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-tech flicker">
+                        <i class="fas fa-shield-alt mr-2 text-cyber-green"></i>CyberSec Hub
+                    </h4>
+                    <p class="text-gray-400 text-sm">
+                        Современная платформа для изучения информационной безопасности 
+                        и этичного хакинга.
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Обучение</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="pages/pentesting.html" class="hover:text-cyber-green transition-colors">Курсы пентестинга</a></li>
+                        <li><a href="#about" class="hover:text-cyber-green transition-colors">Веб-безопасность</a></li>
+                        <li><a href="pages/articles.html" class="hover:text-cyber-green transition-colors">Криптография</a></li>
+                        <li><a href="pages/threats.html" class="hover:text-cyber-green transition-colors">Форензика</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Инструменты</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#tools" class="hover:text-cyber-green transition-colors">Сканеры уязвимостей</a></li>
+                        <li><a href="https://www.wireshark.org/" target="_blank" class="hover:text-cyber-green transition-colors">Анализаторы трафика</a></li>
+                        <li><a href="https://www.metasploit.com/" target="_blank" class="hover:text-cyber-green transition-colors">Эксплойты</a></li>
+                        <li><a href="https://nmap.org/" target="_blank" class="hover:text-cyber-green transition-colors">Утилиты</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4 font-tech">Сообщество</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="https://github.com/swelock/cybersec-hub/discussions" target="_blank" class="hover:text-cyber-green transition-colors">Форум</a></li>
+                        <li><a href="https://discord.gg/cybersec" target="_blank" class="hover:text-cyber-green transition-colors">Discord</a></li>
+                        <li><a href="https://ctftime.org/" target="_blank" class="hover:text-cyber-green transition-colors">CTF соревнования</a></li>
+                        <li><a href="pages/articles.html" class="hover:text-cyber-green transition-colors">Блог</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-cyber-green/30 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 CyberSec Hub. Все права защищены.
+                </p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="https://twitter.com/cybersec_hub" target="_blank" class="text-gray-400 hover:text-cyber-green transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://github.com/swelock/cybersec-hub" target="_blank" class="text-gray-400 hover:text-cyber-green transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://t.me/cybersec_hub" target="_blank" class="text-gray-400 hover:text-cyber-green transition-colors">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://discord.gg/cybersec" target="_blank" class="text-gray-400 hover:text-cyber-green transition-colors">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="src/js/main.js"></script>
+    <script src="src/js/background-animations.js"></script>
+    <script src="src/js/hacker-effects.js"></script>
+</body>
+</html> 
