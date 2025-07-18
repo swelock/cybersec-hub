@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Hub | Форум</title>
+    <meta name="description" content="Форум по информационной безопасности и кибербезопасности">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0a0a0a',
+                        'cyber-green': '#00ff41',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-red': '#ff0040',
+                        'cyber-gray': '#1a1a1a',
+                        'cyber-light': '#f0f0f0',
+                        'matrix-green': '#00ff41',
+                        'terminal-bg': '#0c0c0c',
+                        'terminal-green': '#00ff00',
+                        'neon-blue': '#00ffff',
+                        'neon-pink': '#ff00ff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        .cyber-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+        
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            animation: glitch 2s infinite;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch-1 2s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch-2 2s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        .terminal-window {
+            background: #0c0c0c;
+            border: 1px solid #666;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .forum-post {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #333;
+            border-left: 4px solid #00ff41;
+            transition: all 0.3s ease;
+        }
+        
+        .forum-post:hover {
+            border-left-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+        
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00ff41;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .forum-category {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #333;
+            border-top: 3px solid #00ff41;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .user-badge {
+            background: linear-gradient(90deg, #00ff41, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .pinned-post {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1f0f0f 100%);
+            border-left: 4px solid #ff0040;
+        }
+        
+        .hot-post {
+            background: linear-gradient(135deg, #1a1a2a 0%, #0f0f1f 100%);
+            border-left: 4px solid #ff8800;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes glitch-1 {
+            0% { clip: rect(0, 900px, 0, 0); }
+            5% { clip: rect(0, 900px, 0, 0); }
+            10% { clip: rect(0, 900px, 0, 0); }
+            15% { clip: rect(0, 900px, 0, 0); }
+            20% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(0, 900px, 0, 0); }
+            30% { clip: rect(0, 900px, 0, 0); }
+            35% { clip: rect(0, 900px, 0, 0); }
+            40% { clip: rect(0, 900px, 0, 0); }
+            45% { clip: rect(0, 900px, 0, 0); }
+            50% { clip: rect(0, 900px, 0, 0); }
+            55% { clip: rect(0, 900px, 0, 0); }
+            60% { clip: rect(0, 900px, 0, 0); }
+            65% { clip: rect(0, 900px, 0, 0); }
+            70% { clip: rect(0, 900px, 0, 0); }
+            75% { clip: rect(0, 900px, 0, 0); }
+            80% { clip: rect(0, 900px, 0, 0); }
+            85% { clip: rect(0, 900px, 0, 0); }
+            90% { clip: rect(0, 900px, 0, 0); }
+            95% { clip: rect(0, 900px, 0, 0); }
+            100% { clip: rect(0, 900px, 0, 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0% { clip: rect(0, 900px, 0, 0); }
+            5% { clip: rect(0, 900px, 0, 0); }
+            10% { clip: rect(0, 900px, 0, 0); }
+            15% { clip: rect(0, 900px, 0, 0); }
+            20% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(0, 900px, 0, 0); }
+            30% { clip: rect(0, 900px, 0, 0); }
+            35% { clip: rect(0, 900px, 0, 0); }
+            40% { clip: rect(0, 900px, 0, 0); }
+            45% { clip: rect(0, 900px, 0, 0); }
+            50% { clip: rect(0, 900px, 0, 0); }
+            55% { clip: rect(0, 900px, 0, 0); }
+            60% { clip: rect(0, 900px, 0, 0); }
+            65% { clip: rect(0, 900px, 0, 0); }
+            70% { clip: rect(0, 900px, 0, 0); }
+            75% { clip: rect(0, 900px, 0, 0); }
+            80% { clip: rect(0, 900px, 0, 0); }
+            85% { clip: rect(0, 900px, 0, 0); }
+            90% { clip: rect(0, 900px, 0, 0); }
+            95% { clip: rect(0, 900px, 0, 0); }
+            100% { clip: rect(0, 900px, 0, 0); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-cyber-light">
+    <!-- Navigation -->
+    <nav class="bg-cyber-gray/80 backdrop-blur-sm border-b border-cyber-green/30 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="../index.html" class="text-2xl font-bold text-cyber-green hover:text-cyber-blue transition-colors">
+                        <i class="fas fa-shield-alt mr-2"></i>CyberSec Hub
+                    </a>
+                    <span class="text-cyber-green">/ Форум</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="cyber-btn">
+                        <i class="fas fa-search mr-2"></i>
+                        Поиск
+                    </button>
+                    <a href="auth.html" class="cyber-btn">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Forum Header -->
+    <div class="bg-gradient-to-r from-cyber-dark via-cyber-gray to-cyber-dark py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                <span class="glitch-text text-cyber-green" data-text="ФОРУМ">ФОРУМ</span>
+            </h1>
+            <p class="text-xl text-gray-400 mb-8">Активное сообщество специалистов по информационной безопасности</p>
+            
+            <!-- Forum Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="stats-card p-4">
+                    <div class="text-2xl font-bold text-cyber-green">24,847</div>
+                    <div class="text-sm text-gray-400">Участников</div>
+                </div>
+                <div class="stats-card p-4">
+                    <div class="text-2xl font-bold text-cyber-blue">3,291</div>
+                    <div class="text-sm text-gray-400">Тем</div>
+                </div>
+                <div class="stats-card p-4">
+                    <div class="text-2xl font-bold text-cyber-purple">87,234</div>
+                    <div class="text-sm text-gray-400">Сообщений</div>
+                </div>
+                <div class="stats-card p-4">
+                    <div class="text-2xl font-bold text-cyber-red">342</div>
+                    <div class="text-sm text-gray-400">Онлайн</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forum Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main Forum Content -->
+            <div class="flex-1">
+                <!-- Forum Categories -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-6 text-cyber-green">Разделы форума</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="forum-category p-6 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-cyber-blue">
+                                    <i class="fas fa-bug mr-2"></i>
+                                    Уязвимости и эксплойты
+                                </h3>
+                                <span class="text-sm text-gray-400">1,847 тем</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Обсуждение новых уязвимостей, CVE, эксплойтов и методов защиты</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Последний пост: 2 мин. назад</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="online-indicator"></div>
+                                    <span class="text-xs text-cyber-green">Активно</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-category p-6 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-cyber-blue">
+                                    <i class="fas fa-tools mr-2"></i>
+                                    Инструменты и утилиты
+                                </h3>
+                                <span class="text-sm text-gray-400">892 тем</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Обзоры инструментов, настройка окружения, кастомные скрипты</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Последний пост: 5 мин. назад</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="online-indicator"></div>
+                                    <span class="text-xs text-cyber-green">Активно</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-category p-6 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-cyber-blue">
+                                    <i class="fas fa-network-wired mr-2"></i>
+                                    Сетевая безопасность
+                                </h3>
+                                <span class="text-sm text-gray-400">1,234 темы</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Firewall, IDS/IPS, анализ трафика, защита периметра</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Последний пост: 1 час назад</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="online-indicator"></div>
+                                    <span class="text-xs text-cyber-green">Активно</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-category p-6 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-cyber-blue">
+                                    <i class="fas fa-graduation-cap mr-2"></i>
+                                    Обучение и карьера
+                                </h3>
+                                <span class="text-sm text-gray-400">567 тем</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Курсы, сертификации, вакансии, советы новичкам</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Последний пост: 3 часа назад</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="online-indicator"></div>
+                                    <span class="text-xs text-cyber-green">Активно</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Posts -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-6 text-cyber-green">Последние сообщения</h2>
+                    
+                    <!-- Pinned Post -->
+                    <div class="pinned-post p-6 rounded-lg mb-4">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <i class="fas fa-thumbtack text-cyber-red"></i>
+                            <span class="text-xs text-cyber-red font-bold">ЗАКРЕПЛЕНО</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">
+                            <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                Новые правила форума и рекомендации по безопасности
+                            </a>
+                        </h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Обновили правила форума в соответствии с последними трендами в кибербезопасности. Просим всех участников ознакомиться с новыми требованиями...
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-user-circle text-cyber-green"></i>
+                                    <span class="text-sm"><span class="user-badge">AdminCyber</span></span>
+                                </div>
+                                <span class="text-xs text-gray-500">3 дня назад</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-xs text-gray-500">
+                                    <i class="fas fa-eye mr-1"></i>2,847 просмотров
+                                </span>
+                                <span class="text-xs text-gray-500">
+                                    <i class="fas fa-comment mr-1"></i>156 ответов
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hot Post -->
+                    <div class="hot-post p-6 rounded-lg mb-4">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <i class="fas fa-fire text-orange-500"></i>
+                            <span class="text-xs text-orange-500 font-bold">ГОРЯЧАЯ ТЕМА</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">
+                            <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                Обнаружена критическая уязвимость в Apache Log4j 2.17.1
+                            </a>
+                        </h3>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Исследователи обнаружили новую RCE уязвимость в последней версии Log4j. CVE-2023-44487 позволяет выполнить произвольный код на сервере...
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-user-circle text-cyber-blue"></i>
+                                    <span class="text-sm"><span class="user-badge">SecurityExpert</span></span>
+                                </div>
+                                <span class="text-xs text-gray-500">1 час назад</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-xs text-gray-500">
+                                    <i class="fas fa-eye mr-1"></i>1,234 просмотра
+                                </span>
+                                <span class="text-xs text-gray-500">
+                                    <i class="fas fa-comment mr-1"></i>87 ответов
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Regular Posts -->
+                    <div class="space-y-4">
+                        <div class="forum-post p-6 rounded-lg">
+                            <h3 class="text-lg font-bold mb-2">
+                                <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                    Настройка Burp Suite для продвинутого тестирования
+                                </a>
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Поделюсь своим опытом настройки Burp Suite для максимальной эффективности при пентестинге веб-приложений. Рассмотрим плагины, настройки прокси...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-user-circle text-cyber-purple"></i>
+                                        <span class="text-sm">WebHacker2023</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">2 мин. назад</span>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-eye mr-1"></i>45 просмотров
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-comment mr-1"></i>3 ответа
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-post p-6 rounded-lg">
+                            <h3 class="text-lg font-bold mb-2">
+                                <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                    Анализ APT-атаки на корпоративную инфраструктуру
+                                </a>
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Разбираю реальный кейс APT-атаки, которую удалось обнаружить и остановить. Рассмотрим TTPs, IOCs, и методы защиты от подобных угроз...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-user-circle text-cyber-blue"></i>
+                                        <span class="text-sm">ThreatHunter</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">15 мин. назад</span>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-eye mr-1"></i>124 просмотра
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-comment mr-1"></i>12 ответов
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-post p-6 rounded-lg">
+                            <h3 class="text-lg font-bold mb-2">
+                                <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                    Помогите с настройкой SIEM системы
+                                </a>
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Устанавливаю Elastic Stack для мониторинга безопасности. Возникли проблемы с настройкой правил корреляции для обнаружения аномалий...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-user-circle text-gray-400"></i>
+                                        <span class="text-sm">SOCAnalyst</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">30 мин. назад</span>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-eye mr-1"></i>89 просмотров
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-comment mr-1"></i>7 ответов
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="forum-post p-6 rounded-lg">
+                            <h3 class="text-lg font-bold mb-2">
+                                <a href="#" class="text-cyber-light hover:text-cyber-green transition-colors">
+                                    Обзор CTF соревнований на 2024 год
+                                </a>
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Составил список интересных CTF соревнований на следующий год. Включил как онлайн, так и офлайн мероприятия с описанием категорий...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-user-circle text-cyber-green"></i>
+                                        <span class="text-sm">CTFMaster</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">1 час назад</span>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-eye mr-1"></i>267 просмотров
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        <i class="fas fa-comment mr-1"></i>23 ответа
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:w-80 space-y-6">
+                <!-- Online Users -->
+                <div class="stats-card p-6 rounded-lg">
+                    <h3 class="text-lg font-bold mb-4 text-cyber-green">
+                        <i class="fas fa-users mr-2"></i>
+                        Онлайн пользователи
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="online-indicator"></div>
+                                <span class="text-sm font-semibold user-badge">AdminCyber</span>
+                            </div>
+                            <span class="text-xs text-gray-500">Админ</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="online-indicator"></div>
+                                <span class="text-sm">SecurityExpert</span>
+                            </div>
+                            <span class="text-xs text-gray-500">Эксперт</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="online-indicator"></div>
+                                <span class="text-sm">WebHacker2023</span>
+                            </div>
+                            <span class="text-xs text-gray-500">Участник</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="online-indicator"></div>
+                                <span class="text-sm">ThreatHunter</span>
+                            </div>
+                            <span class="text-xs text-gray-500">Участник</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="online-indicator"></div>
+                                <span class="text-sm">SOCAnalyst</span>
+                            </div>
+                            <span class="text-xs text-gray-500">Новичок</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-600">
+                        <div class="text-xs text-gray-500 text-center">
+                            И ещё 337 участников онлайн
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="stats-card p-6 rounded-lg">
+                    <h3 class="text-lg font-bold mb-4 text-cyber-green">
+                        <i class="fas fa-clock mr-2"></i>
+                        Последняя активность
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-comment text-cyber-blue"></i>
+                            <span class="text-gray-400">Новый ответ в теме</span>
+                        </div>
+                        <div class="text-xs text-gray-500 ml-6">
+                            "Настройка Burp Suite..." - 2 мин. назад
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-plus text-cyber-green"></i>
+                            <span class="text-gray-400">Новая тема создана</span>
+                        </div>
+                        <div class="text-xs text-gray-500 ml-6">
+                            "Анализ APT-атаки..." - 15 мин. назад
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-user-plus text-cyber-purple"></i>
+                            <span class="text-gray-400">Новый пользователь</span>
+                        </div>
+                        <div class="text-xs text-gray-500 ml-6">
+                            "CyberNewbie" зарегистрировался - 1 час назад
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top Contributors -->
+                <div class="stats-card p-6 rounded-lg">
+                    <h3 class="text-lg font-bold mb-4 text-cyber-green">
+                        <i class="fas fa-trophy mr-2"></i>
+                        Топ участники
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-yellow-400">🥇</span>
+                                <span class="text-sm font-semibold user-badge">SecurityExpert</span>
+                            </div>
+                            <span class="text-xs text-gray-500">12,847 очков</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-gray-400">🥈</span>
+                                <span class="text-sm font-semibold">ThreatHunter</span>
+                            </div>
+                            <span class="text-xs text-gray-500">9,234 очков</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-orange-400">🥉</span>
+                                <span class="text-sm font-semibold">WebHacker2023</span>
+                            </div>
+                            <span class="text-xs text-gray-500">7,891 очков</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-cyber-gray/50 border-t border-cyber-green/30 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">
+                © 2024 CyberSec Hub Forum. Все права защищены.
+            </p>
+            <div class="mt-4 flex justify-center space-x-6">
+                <a href="#" class="text-cyber-green hover:text-cyber-blue transition-colors">Правила</a>
+                <a href="#" class="text-cyber-green hover:text-cyber-blue transition-colors">Конфиденциальность</a>
+                <a href="#" class="text-cyber-green hover:text-cyber-blue transition-colors">Контакты</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

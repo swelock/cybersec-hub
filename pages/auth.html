@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Hub | Авторизация</title>
+    <meta name="description" content="Вход и регистрация на форуме по информационной безопасности">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0a0a0a',
+                        'cyber-green': '#00ff41',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-red': '#ff0040',
+                        'cyber-gray': '#1a1a1a',
+                        'cyber-light': '#f0f0f0',
+                        'matrix-green': '#00ff41',
+                        'terminal-bg': '#0c0c0c',
+                        'terminal-green': '#00ff00',
+                        'neon-blue': '#00ffff',
+                        'neon-pink': '#ff00ff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        .cyber-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .cyber-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+        
+        .cyber-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .cyber-input {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            color: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-input:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+        
+        .cyber-input.error {
+            border-color: #ff0040;
+            box-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
+        }
+        
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            animation: glitch 2s infinite;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch-1 2s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch-2 2s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        .auth-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: #ff0040; width: 25%; }
+        .strength-fair { background: #ff8800; width: 50%; }
+        .strength-good { background: #ffff00; width: 75%; }
+        .strength-strong { background: #00ff41; width: 100%; }
+        
+        .loading-spinner {
+            border: 2px solid #333;
+            border-top: 2px solid #00ff41;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes glitch-1 {
+            0% { clip: rect(0, 900px, 0, 0); }
+            5% { clip: rect(0, 900px, 0, 0); }
+            10% { clip: rect(0, 900px, 0, 0); }
+            15% { clip: rect(0, 900px, 0, 0); }
+            20% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(0, 900px, 0, 0); }
+            30% { clip: rect(0, 900px, 0, 0); }
+            35% { clip: rect(0, 900px, 0, 0); }
+            40% { clip: rect(0, 900px, 0, 0); }
+            45% { clip: rect(0, 900px, 0, 0); }
+            50% { clip: rect(0, 900px, 0, 0); }
+            55% { clip: rect(0, 900px, 0, 0); }
+            60% { clip: rect(0, 900px, 0, 0); }
+            65% { clip: rect(0, 900px, 0, 0); }
+            70% { clip: rect(0, 900px, 0, 0); }
+            75% { clip: rect(0, 900px, 0, 0); }
+            80% { clip: rect(0, 900px, 0, 0); }
+            85% { clip: rect(0, 900px, 0, 0); }
+            90% { clip: rect(0, 900px, 0, 0); }
+            95% { clip: rect(0, 900px, 0, 0); }
+            100% { clip: rect(0, 900px, 0, 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0% { clip: rect(0, 900px, 0, 0); }
+            5% { clip: rect(0, 900px, 0, 0); }
+            10% { clip: rect(0, 900px, 0, 0); }
+            15% { clip: rect(0, 900px, 0, 0); }
+            20% { clip: rect(0, 900px, 0, 0); }
+            25% { clip: rect(0, 900px, 0, 0); }
+            30% { clip: rect(0, 900px, 0, 0); }
+            35% { clip: rect(0, 900px, 0, 0); }
+            40% { clip: rect(0, 900px, 0, 0); }
+            45% { clip: rect(0, 900px, 0, 0); }
+            50% { clip: rect(0, 900px, 0, 0); }
+            55% { clip: rect(0, 900px, 0, 0); }
+            60% { clip: rect(0, 900px, 0, 0); }
+            65% { clip: rect(0, 900px, 0, 0); }
+            70% { clip: rect(0, 900px, 0, 0); }
+            75% { clip: rect(0, 900px, 0, 0); }
+            80% { clip: rect(0, 900px, 0, 0); }
+            85% { clip: rect(0, 900px, 0, 0); }
+            90% { clip: rect(0, 900px, 0, 0); }
+            95% { clip: rect(0, 900px, 0, 0); }
+            100% { clip: rect(0, 900px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-cyber-light">
+    <!-- Navigation -->
+    <nav class="bg-cyber-gray/80 backdrop-blur-sm border-b border-cyber-green/30">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="../index.html" class="text-2xl font-bold text-cyber-green hover:text-cyber-blue transition-colors">
+                        <i class="fas fa-shield-alt mr-2"></i>CyberSec Hub
+                    </a>
+                    <span class="text-cyber-green">/ Авторизация</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="forum.html" class="cyber-btn">
+                        <i class="fas fa-comments mr-2"></i>
+                        Форум
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Header -->
+    <div class="bg-gradient-to-r from-cyber-dark via-cyber-gray to-cyber-dark py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                <span class="glitch-text text-cyber-green" data-text="АВТОРИЗАЦИЯ">АВТОРИЗАЦИЯ</span>
+            </h1>
+            <p class="text-xl text-gray-400">Присоединяйтесь к сообществу специалистов по кибербезопасности</p>
+        </div>
+    </div>
+
+    <!-- Auth Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-md mx-auto">
+            <!-- Tab Navigation -->
+            <div class="flex mb-8">
+                <button id="login-tab" class="flex-1 py-3 px-6 text-center border-b-2 border-cyber-green text-cyber-green font-bold">
+                    Вход
+                </button>
+                <button id="register-tab" class="flex-1 py-3 px-6 text-center border-b-2 border-transparent text-gray-400 hover:text-cyber-green transition-colors">
+                    Регистрация
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-card p-8">
+                <h2 class="text-2xl font-bold mb-6 text-center">Вход в систему</h2>
+                
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Имя пользователя или Email</label>
+                        <input 
+                            type="text" 
+                            id="login-username" 
+                            name="username" 
+                            class="cyber-input w-full"
+                            placeholder="Введите имя пользователя или email"
+                            required
+                            autocomplete="username"
+                        >
+                        <div id="login-username-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Пароль</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="login-password" 
+                                name="password" 
+                                class="cyber-input w-full pr-12"
+                                placeholder="Введите пароль"
+                                required
+                                autocomplete="current-password"
+                            >
+                            <button 
+                                type="button" 
+                                id="toggle-login-password"
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-cyber-green"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div id="login-password-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2" id="remember-me">
+                            <span class="text-sm">Запомнить меня</span>
+                        </label>
+                        <a href="#" class="text-sm text-cyber-green hover:text-cyber-blue">Забыли пароль?</a>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="login-submit"
+                        class="cyber-btn w-full"
+                    >
+                        <span id="login-submit-text">Войти</span>
+                        <div id="login-loading" class="loading-spinner hidden ml-2"></div>
+                    </button>
+                </form>
+
+                <div id="login-error" class="text-cyber-red text-sm mt-4 hidden"></div>
+                <div id="login-success" class="text-cyber-green text-sm mt-4 hidden"></div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="auth-card p-8 hidden">
+                <h2 class="text-2xl font-bold mb-6 text-center">Регистрация</h2>
+                
+                <form id="registerForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Имя пользователя</label>
+                        <input 
+                            type="text" 
+                            id="register-username" 
+                            name="username" 
+                            class="cyber-input w-full"
+                            placeholder="Введите имя пользователя"
+                            required
+                            autocomplete="username"
+                            minlength="3"
+                            maxlength="20"
+                            pattern="^[a-zA-Z0-9_]+$"
+                        >
+                        <div class="text-xs text-gray-400 mt-1">3-20 символов, только буквы, цифры и подчёркивание</div>
+                        <div id="register-username-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Email</label>
+                        <input 
+                            type="email" 
+                            id="register-email" 
+                            name="email" 
+                            class="cyber-input w-full"
+                            placeholder="Введите email адрес"
+                            required
+                            autocomplete="email"
+                        >
+                        <div id="register-email-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Пароль</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="register-password" 
+                                name="password" 
+                                class="cyber-input w-full pr-12"
+                                placeholder="Придумайте надёжный пароль"
+                                required
+                                autocomplete="new-password"
+                                minlength="8"
+                            >
+                            <button 
+                                type="button" 
+                                id="toggle-register-password"
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-cyber-green"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength mt-2">
+                            <div id="password-strength-bar" class="password-strength-bar"></div>
+                        </div>
+                        <div id="password-strength-text" class="text-xs text-gray-400 mt-1"></div>
+                        <div class="text-xs text-gray-400 mt-1">Минимум 8 символов, включая строчные и заглавные буквы, цифры и спецсимволы</div>
+                        <div id="register-password-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Подтвердите пароль</label>
+                        <input 
+                            type="password" 
+                            id="register-password-confirm" 
+                            name="password_confirm" 
+                            class="cyber-input w-full"
+                            placeholder="Повторите пароль"
+                            required
+                            autocomplete="new-password"
+                        >
+                        <div id="register-password-confirm-error" class="text-cyber-red text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <input type="checkbox" class="mr-2 mt-1" id="terms-agree" required>
+                        <label for="terms-agree" class="text-sm">
+                            Я соглашаюсь с <a href="#" class="text-cyber-green hover:text-cyber-blue">условиями использования</a> 
+                            и <a href="#" class="text-cyber-green hover:text-cyber-blue">политикой конфиденциальности</a>
+                        </label>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="register-submit"
+                        class="cyber-btn w-full"
+                    >
+                        <span id="register-submit-text">Зарегистрироваться</span>
+                        <div id="register-loading" class="loading-spinner hidden ml-2"></div>
+                    </button>
+                </form>
+
+                <div id="register-error" class="text-cyber-red text-sm mt-4 hidden"></div>
+                <div id="register-success" class="text-cyber-green text-sm mt-4 hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Переключение между формами
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('border-cyber-green', 'text-cyber-green');
+            loginTab.classList.remove('border-transparent', 'text-gray-400');
+            registerTab.classList.add('border-transparent', 'text-gray-400');
+            registerTab.classList.remove('border-cyber-green', 'text-cyber-green');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('border-cyber-green', 'text-cyber-green');
+            registerTab.classList.remove('border-transparent', 'text-gray-400');
+            loginTab.classList.add('border-transparent', 'text-gray-400');
+            loginTab.classList.remove('border-cyber-green', 'text-cyber-green');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        // Переключение видимости паролей
+        document.getElementById('toggle-login-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('login-password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('toggle-register-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('register-password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Проверка силы пароля
+        document.getElementById('register-password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('password-strength-bar');
+            const strengthText = document.getElementById('password-strength-text');
+            
+            let strength = 0;
+            const checks = [
+                /[a-z]/, // строчные буквы
+                /[A-Z]/, // заглавные буквы
+                /[0-9]/, // цифры
+                /[^A-Za-z0-9]/, // спецсимволы
+                /.{8,}/ // длина >= 8
+            ];
+
+            checks.forEach(check => {
+                if (check.test(password)) strength++;
+            });
+
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength === 0) {
+                strengthText.textContent = '';
+            } else if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Слабый пароль';
+                strengthText.className = 'text-xs text-red-400 mt-1';
+            } else if (strength === 3) {
+                strengthBar.classList.add('strength-fair');
+                strengthText.textContent = 'Средний пароль';
+                strengthText.className = 'text-xs text-yellow-400 mt-1';
+            } else if (strength === 4) {
+                strengthBar.classList.add('strength-good');
+                strengthText.textContent = 'Хороший пароль';
+                strengthText.className = 'text-xs text-blue-400 mt-1';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Надёжный пароль';
+                strengthText.className = 'text-xs text-green-400 mt-1';
+            }
+        });
+
+        // Проверка совпадения паролей
+        document.getElementById('register-password-confirm').addEventListener('input', function() {
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = this.value;
+            const errorDiv = document.getElementById('register-password-confirm-error');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.classList.add('error');
+                errorDiv.textContent = 'Пароли не совпадают';
+                errorDiv.classList.remove('hidden');
+            } else {
+                this.classList.remove('error');
+                errorDiv.classList.add('hidden');
+            }
+        });
+
+        // Функция для отображения ошибок
+        function showError(formType, field, message) {
+            const errorDiv = document.getElementById(`${formType}-${field}-error`);
+            const input = document.getElementById(`${formType}-${field}`);
+            
+            if (errorDiv && input) {
+                errorDiv.textContent = message;
+                errorDiv.classList.remove('hidden');
+                input.classList.add('error');
+            }
+        }
+
+        // Функция для очистки ошибок
+        function clearErrors(formType) {
+            const errors = document.querySelectorAll(`[id^="${formType}-"][id$="-error"]`);
+            const inputs = document.querySelectorAll(`[id^="${formType}-"]`);
+            
+            errors.forEach(error => {
+                error.classList.add('hidden');
+                error.textContent = '';
+            });
+            
+            inputs.forEach(input => {
+                input.classList.remove('error');
+            });
+        }
+
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            clearErrors('login');
+            
+            const submitBtn = document.getElementById('login-submit');
+            const submitText = document.getElementById('login-submit-text');
+            const loading = document.getElementById('login-loading');
+            
+            submitBtn.disabled = true;
+            submitText.textContent = 'Вход...';
+            loading.classList.remove('hidden');
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Сохранение токена
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    
+                    document.getElementById('login-success').textContent = 'Вход выполнен успешно! Перенаправляем...';
+                    document.getElementById('login-success').classList.remove('hidden');
+                    
+                    // Перенаправление
+                    setTimeout(() => {
+                        window.location.href = 'forum.html';
+                    }, 1000);
+                } else {
+                    if (result.errors) {
+                        result.errors.forEach(error => {
+                            showError('login', error.path, error.msg);
+                        });
+                    } else {
+                        document.getElementById('login-error').textContent = result.error || 'Ошибка входа';
+                        document.getElementById('login-error').classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                document.getElementById('login-error').textContent = 'Ошибка сети. Попробуйте позже.';
+                document.getElementById('login-error').classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Войти';
+                loading.classList.add('hidden');
+            }
+        });
+
+        // Обработка формы регистрации
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            clearErrors('register');
+            
+            const submitBtn = document.getElementById('register-submit');
+            const submitText = document.getElementById('register-submit-text');
+            const loading = document.getElementById('register-loading');
+            
+            submitBtn.disabled = true;
+            submitText.textContent = 'Регистрация...';
+            loading.classList.remove('hidden');
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Проверка совпадения паролей
+            if (data.password !== data.password_confirm) {
+                showError('register', 'password-confirm', 'Пароли не совпадают');
+                submitBtn.disabled = false;
+                submitText.textContent = 'Зарегистрироваться';
+                loading.classList.add('hidden');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Сохранение токена
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    
+                    document.getElementById('register-success').textContent = 'Регистрация завершена успешно! Перенаправляем...';
+                    document.getElementById('register-success').classList.remove('hidden');
+                    
+                    // Перенаправление
+                    setTimeout(() => {
+                        window.location.href = 'forum.html';
+                    }, 1000);
+                } else {
+                    if (result.errors) {
+                        result.errors.forEach(error => {
+                            showError('register', error.path, error.msg);
+                        });
+                    } else {
+                        document.getElementById('register-error').textContent = result.error || 'Ошибка регистрации';
+                        document.getElementById('register-error').classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                document.getElementById('register-error').textContent = 'Ошибка сети. Попробуйте позже.';
+                document.getElementById('register-error').classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Зарегистрироваться';
+                loading.classList.add('hidden');
+            }
+        });
+
+        // Проверка авторизации при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Пользователь уже авторизован, перенаправляем на форум
+                window.location.href = 'forum.html';
+            }
+        });
+    </script>
+</body>
+</html> 
